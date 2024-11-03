@@ -3,8 +3,8 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include "Tone32.hpp"
-#include <ESP32_Servo.h>
+// #include "Tone32.hpp"
+#include <ESP32Servo.h>
 const int servoPin = 4; // Pin connected to servo
 Servo doorServo;
 int pos = 0;
@@ -26,7 +26,7 @@ int pos = 0;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 // Tone32 object for buzzer
-Tone32 tone32(BUZZER_PIN, PWM_CHANNEL);
+// Tone32 tone32(BUZZER_PIN, PWM_CHANNEL);
 double right_tone_frequency;
 double wrong_tone_frequency;
 
@@ -38,9 +38,9 @@ char keys[ROW_NUM][COLUMN_NUM] = {
   {'7', '8', '9', 'C'},
   {'*', '0', '#', 'D'}
 };
-byte pin_rows[ROW_NUM] = {1, 10, 9, 11}; // GPIO1, GPIO10, GPIO9, GPIO11 connect to the row pins
-byte pin_column[COLUMN_NUM] = {12, 14, 21, 34};  // GPIO12, GPIO14, GPIO21 connect to the column pins
-Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, ROW_NUM, COLUMN_NUM );
+byte pin_rows[ROW_NUM] = {12, 14, 21, 34}; // GPIO1, GPIO10, GPIO9, GPIO11 connect to the row pins
+byte pin_column[COLUMN_NUM] = {1, 10, 9, 11};  // GPIO12, GPIO14, GPIO21 connect to the column pins
+Keypad keypad = Keypad( makeKeymap(keys), pin_rows, pin_column, COLUMN_NUM, ROW_NUM );
 const String password = "6908"; // change your password here
 String input_password;
 // For ESP32 and ESP32_S2, select ESP32 timer number (0-3)
@@ -81,7 +81,7 @@ void loop() {
       if (password == input_password) {
         Serial.println("The password is correct, ACCESS GRANTED!");
         // DO YOUR WORK HERE
-        tone32.playTone(right_tone_frequency);
+        // tone32.playTone(right_tone_frequency);
         openDoor();
 
         display.clearDisplay();
@@ -98,7 +98,7 @@ void loop() {
 
         delay(5000); // Keep the door open for 5 seconds
         closeDoor();
-        tone32.stopPlaying();
+        // tone32.stopPlaying();
          display.clearDisplay();
         display.setCursor(0, 20);
         display.setTextSize(1);
@@ -106,7 +106,7 @@ void loop() {
         display.display();
       } else {
         Serial.println("The password is incorrect, ACCESS DENIED!");
-        tone32.playTone(wrong_tone_frequency);
+        // tone32.playTone(wrong_tone_frequency);
         display.clearDisplay();
         display.setTextColor(WHITE);
         display.setTextSize(1);
@@ -117,7 +117,7 @@ void loop() {
         display.print("Error");
         display.display();
         delay(1000);
-        tone32.stopPlaying();
+        // tone32.stopPlaying();
         display.clearDisplay();
         display.setCursor(0, 20);
         display.print(" Try Again ");
